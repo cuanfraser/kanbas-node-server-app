@@ -5,4 +5,4 @@ import Lab5 from './Lab5/index.js';
 const app = express();
 Hello(app);
 Lab5(app);
-app.listen(4000);
+app.listen(process.env.PORT || 4000);
