@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/cuanfraser/kanbas-node-server-app#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.21.1"
   }
 }
