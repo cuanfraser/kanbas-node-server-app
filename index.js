@@ -5,9 +5,9 @@ import cors from 'cors';
 import UserRoutes from "./Kanbas/Users/routes.js";
 
 const app = express();
-UserRoutes(app);
 app.use(cors());
 app.use(express.json());
 Hello(app);
 Lab5(app);
+UserRoutes(app);
 app.listen(process.env.PORT || 4000);
