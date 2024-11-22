@@ -11,12 +11,6 @@ export default function UserRoutes(app) {
     };
     app.post('/api/users/current/courses', createCourse);
 
-    app.get("/api/courses/:courseId/modules", (req, res) => {
-        const { courseId } = req.params;
-        const modules = modulesDao.findModulesForCourse(courseId);
-        res.json(modules);
-      });    
-
     const createUser = (req, res) => {};
     const deleteUser = (req, res) => {};
     const findAllUsers = (req, res) => {};

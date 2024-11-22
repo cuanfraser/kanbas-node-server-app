@@ -28,4 +28,10 @@ export default function CourseRoutes(app) {
         const newModule = modulesDao.createModule(module);
         res.send(newModule);
     });
+
+    app.get('/api/courses/:courseId/modules', (req, res) => {
+        const { courseId } = req.params;
+        const modules = modulesDao.findModulesForCourse(courseId);
+        res.json(modules);
+    });
 }
