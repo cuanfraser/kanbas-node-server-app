@@ -6,6 +6,7 @@ import session from 'express-session';
 import 'dotenv/config';
 import UserRoutes from './Kanbas/Users/routes.js';
 import CourseRoutes from './Kanbas/Courses/routes.js';
+import ModuleRoutes from "./Kanbas/Modules/routes.js";
 
 const app = express();
 app.use(cors({ credentials: true, origin: process.env.NETLIFY_URL || 'http://localhost:3000' }));
@@ -29,4 +30,5 @@ Hello(app);
 Lab5(app);
 UserRoutes(app);
 CourseRoutes(app);
+ModuleRoutes(app);
 app.listen(process.env.PORT || 4000);
