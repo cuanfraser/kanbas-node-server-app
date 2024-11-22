@@ -17,7 +17,7 @@ export function deleteAssignment(assignmentId) {
 }
 
 export function updateAssignment(assignmentId, assignmentUpdates) {
-    const { courses: assignments } = Database;
+    const { assignments } = Database;
     const assignment = assignments.find((assignment) => assignment._id === assignmentId);
     Object.assign(assignment, assignmentUpdates);
     return assignment;
