@@ -92,8 +92,7 @@ export default function UserRoutes(app) {
             }
             userId = currentUser._id;
         }
-        const { course } = req.body;
-        const newEnrollment = enrollmentsDao.enrollUserInCourse(userId, course);
+        const newEnrollment = enrollmentsDao.enrollUserInCourse(userId, req.body._id);
         res.json(newEnrollment);
     };
 
