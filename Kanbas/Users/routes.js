@@ -12,7 +12,10 @@ export default function UserRoutes(app) {
 
     const createUser = (req, res) => {};
     const deleteUser = (req, res) => {};
-    const findAllUsers = (req, res) => {};
+    const findAllUsers = async (req, res) => {
+        const users = await dao.findAllUsers();
+        res.json(users);
+    };
     const findUserById = (req, res) => {};
     const updateUser = async (req, res) => {
         const userId = req.params.userId;
