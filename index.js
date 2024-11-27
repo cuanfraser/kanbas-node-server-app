@@ -12,7 +12,8 @@ import AssignmentRoutes from './Kanbas/Assignments/routes.js';
 import EnrollmentRoutes from './Kanbas/Enrollments/routes.js';
 
 const CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING || "mongodb://127.0.0.1:27017/kanbas"
-mongoose.connect(CONNECTION_STRING);
+mongoose.connect(CONNECTION_STRING).
+    catch(error => console.log(error));
 
 const app = express();
 app.use(cors({ credentials: true, origin: process.env.NETLIFY_URL || 'http://localhost:3000' }));
