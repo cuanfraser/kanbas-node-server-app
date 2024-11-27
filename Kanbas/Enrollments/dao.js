@@ -1,10 +1,10 @@
 import model from './model.js';
 
-export async function findEnrollmentsForUser(userId) {
+export function findEnrollmentsForUser(userId) {
     return model.find({ user: userId })
 }
 
-export async function deleteEnrollment(enrollmentId) {
+export function deleteEnrollment(enrollmentId) {
     return model.deleteOne({ _id: enrollmentId });
 }
 
@@ -24,4 +24,8 @@ export function enrollUserInCourse(user, course) {
 
 export function unenrollUserFromCourse(user, course) {
     return model.deleteOne({ user, course });
+}
+
+export function deleteEnrollmentsForCourse(courseId) {
+    return model.deleteMany({ course: courseId });
 }
