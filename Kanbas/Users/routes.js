@@ -43,7 +43,7 @@ export default function UserRoutes(app) {
     };
 
     const updateUser = async (req, res) => {
-        const userId = req.params.userId;
+        const { userId } = req.params;
         const userUpdates = req.body;
         await dao.updateUser(userId, userUpdates);
         const currentUser = req.session['currentUser'];
