@@ -3,6 +3,7 @@ const quizSchema = new mongoose.Schema(
   {
     course: { type: mongoose.Schema.Types.ObjectId, ref: 'CourseModel' },
     title: String,
+    published: { type: Boolean, default: false },
     description: String,
     type: {
       type: String,
