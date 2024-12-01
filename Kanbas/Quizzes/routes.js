@@ -1,4 +1,4 @@
-import { createQuiz, deleteQuiz, findQuizzesForCourse, updateQuiz } from './dao.js';
+import { createQuiz, deleteQuiz, findQuizzesForCourse, updateQuiz, findQuizById } from './dao.js';
 
 export const QuizzesRoutes = (app) => {
   app.post('/api/courses/:courseId/quizzes', async (req, res) => {
@@ -9,6 +9,12 @@ export const QuizzesRoutes = (app) => {
     };
     const newQuiz = await createQuiz(quiz);
     res.send(newQuiz);
+  });
+
+  app.get('/api/quizzes/:quizId', async (req, res) => {
+    const { quizId } = req.params;
+    const quiz = await findQuizById(quizId);
+    res.json(quiz);
   });
 
   app.get('/api/courses/:courseId/quizzes', async (req, res) => {
