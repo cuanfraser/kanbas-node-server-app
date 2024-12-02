@@ -3,7 +3,7 @@ import { createQuiz, deleteQuiz, findQuizzesForCourse, updateQuiz, findQuizById 
 export const QuizzesRoutes = (app) => {
   app.post('/api/courses/:courseId/quizzes', async (req, res) => {
     const { courseId } = req.params;
-    if (courseId) {
+    if (courseId && courseId !== 'undefined') {
       const quiz = {
         ...req.body,
         course: courseId,
@@ -17,7 +17,7 @@ export const QuizzesRoutes = (app) => {
 
   app.get('/api/quizzes/:quizId', async (req, res) => {
     const { quizId } = req.params;
-    if (quizId) {
+    if (quizId && quizId !== 'undefined') {
       const quiz = await findQuizById(quizId);
       res.json(quiz);
     } else {
@@ -27,7 +27,7 @@ export const QuizzesRoutes = (app) => {
 
   app.get('/api/courses/:courseId/quizzes', async (req, res) => {
     const { courseId } = req.params;
-    if (courseId) {
+    if (courseId && courseId !== 'undefined') {
       const quizzes = await findQuizzesForCourse(courseId);
       res.json(quizzes);
     } else {
@@ -37,7 +37,7 @@ export const QuizzesRoutes = (app) => {
 
   app.put('/api/quizzes/:quizId', async (req, res) => {
     const { quizId } = req.params;
-    if (quizId) {
+    if (quizId && quizId !== 'undefined') {
       const quizUpdates = req.body;
       const updatedQuiz = await updateQuiz(quizId, quizUpdates);
       res.send(updatedQuiz);
@@ -48,7 +48,7 @@ export const QuizzesRoutes = (app) => {
 
   app.delete('/api/quizzes/:quizId', async (req, res) => {
     const { quizId } = req.params;
-    if (quizId) {
+    if (quizId && quizId !== 'undefined') {
       const status = await deleteQuiz(quizId);
       res.send(status);
     } else {
