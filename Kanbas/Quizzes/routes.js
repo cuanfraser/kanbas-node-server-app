@@ -23,7 +23,7 @@ export const QuizzesRoutes = (app) => {
     res.json(quizzes);
   });
 
-  app.put('/api/assignments/:quizId', async (req, res) => {
+  app.put('/api/quizzes/:quizId', async (req, res) => {
     const { quizId } = req.params;
     const quizUpdates = req.body;
     const updatedQuiz = await updateQuiz(quizId, quizUpdates);
