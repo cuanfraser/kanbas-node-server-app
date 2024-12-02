@@ -4,6 +4,7 @@ import Hello from './Hello.js';
 import Lab5 from './Lab5/index.js';
 import cors from 'cors';
 import session from 'express-session';
+import MongoStore from 'connect-mongo';
 import 'dotenv/config';
 import UserRoutes from './Kanbas/Users/routes.js';
 import CourseRoutes from './Kanbas/Courses/routes.js';
@@ -22,6 +23,7 @@ const sessionOptions = {
     secret: process.env.SESSION_SECRET || 'kanbas',
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({ mongoUrl: CONNECTION_STRING })
 };
 if (process.env.NODE_ENV !== 'development') {
     sessionOptions.proxy = true;
