@@ -14,7 +14,7 @@ const quizSchema = new mongoose.Schema(
     points: { type: Number, default: 100, required: true },
     group: {
       type: String,
-      enum: ['QUIZZES', 'EXAMS', 'ASSIGNMENTS', 'PROEJCT'],
+      enum: ['QUIZZES', 'EXAMS', 'ASSIGNMENTS', 'PROJECT'],
       default: 'QUIZZES',
       required: true,
     },
