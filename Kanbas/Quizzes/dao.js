@@ -7,14 +7,14 @@ export const createQuiz = (quiz) => {
 
 export const findQuizById = (quizId) => {
   return model.findById(quizId);
-}
+};
 
 export const findQuizzesForCourse = (courseId) => {
   return model.find({ course: courseId });
 };
 
 export const updateQuiz = (quizId, quizUpdates) => {
-  return model.updateOne({ _id: quizId }, quizUpdates);
+  return model.findOneAndUpdate({ _id: quizId }, quizUpdates, { new: true });
 };
 
 export const deleteQuiz = (quizId) => {
