@@ -14,6 +14,7 @@ export const findQuizzesForCourse = (courseId) => {
 };
 
 export const updateQuiz = (quizId, quizUpdates) => {
+  delete quizUpdates._id;
   return model.findOneAndUpdate({ _id: quizId }, quizUpdates, { new: true });
 };
 
