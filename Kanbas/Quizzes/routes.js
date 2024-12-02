@@ -3,36 +3,56 @@ import { createQuiz, deleteQuiz, findQuizzesForCourse, updateQuiz, findQuizById 
 export const QuizzesRoutes = (app) => {
   app.post('/api/courses/:courseId/quizzes', async (req, res) => {
     const { courseId } = req.params;
-    const quiz = {
-      ...req.body,
-      course: courseId,
-    };
-    const newQuiz = await createQuiz(quiz);
-    res.send(newQuiz);
+    if (courseId) {
+      const quiz = {
+        ...req.body,
+        course: courseId,
+      };
+      const newQuiz = await createQuiz(quiz);
+      res.send(newQuiz);
+    } else {
+      res.status(404).json({ message: `Invalid course id: ${courseId}.` });
+    }
   });
 
   app.get('/api/quizzes/:quizId', async (req, res) => {
     const { quizId } = req.params;
-    const quiz = await findQuizById(quizId);
-    res.json(quiz);
+    if (quizId) {
+      const quiz = await findQuizById(quizId);
+      res.json(quiz);
+    } else {
+      res.status(404).json({ message: `Invalid quiz id: ${quizId}.` });
+    }
   });
 
   app.get('/api/courses/:courseId/quizzes', async (req, res) => {
     const { courseId } = req.params;
-    const quizzes = await findQuizzesForCourse(courseId);
-    res.json(quizzes);
+    if (courseId) {
+      const quizzes = await findQuizzesForCourse(courseId);
+      res.json(quizzes);
+    } else {
+      res.status(404).json({ message: `Invalid course id: ${courseId}.` });
+    }
   });
 
   app.put('/api/quizzes/:quizId', async (req, res) => {
     const { quizId } = req.params;
-    const quizUpdates = req.body;
-    const updatedQuiz = await updateQuiz(quizId, quizUpdates);
-    res.send(updatedQuiz);
+    if (quizId) {
+      const quizUpdates = req.body;
+      const updatedQuiz = await updateQuiz(quizId, quizUpdates);
+      res.send(updatedQuiz);
+    } else {
+      res.status(404).json({ message: `Invalid quiz id: ${quizId}.` });
+    }
   });
 
   app.delete('/api/quizzes/:quizId', async (req, res) => {
     const { quizId } = req.params;
-    const status = await deleteQuiz(quizId);
-    res.send(status);
+    if (quizId) {
+      const status = await deleteQuiz(quizId);
+      res.send(status);
+    } else {
+      res.status(404).json({ message: `Invalid quiz id: ${quizId}.` });
+    }
   });
 };
