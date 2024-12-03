@@ -52,7 +52,7 @@ export const QuestionRoutes = (app) => {
     }
   });
 
-  app.delete('/api/questions/:quizId', async (req, res) => {
+  app.delete('/api/questions/:questionId', async (req, res) => {
     const { questionId } = req.params;
     if (questionId && questionId !== 'undefined') {
       const status = await deleteQuestion(questionId);
