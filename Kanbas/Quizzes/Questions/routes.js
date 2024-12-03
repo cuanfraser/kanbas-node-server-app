@@ -1,3 +1,4 @@
+import { findQuizById } from '../dao.js';
 import {
   createQuestionForQuiz,
   findQuestionById,
@@ -8,6 +9,15 @@ import {
 
 export const QuestionRoutes = (app) => {
   app.post('/api/quizzes/:quizId/questions', async (req, res) => {
+    const currentUser = req.session['currentUser'];
+    if (!currentUser) {
+      res.status(401).json({ message: 'User not logged in.' });
+      return;
+    }
+    if (currentUser.role !== 'FACULTY' && currentUser.role !== 'ADMIN') {
+      res.status(401).json({ message: 'Must be admin or faculty to create quiz questions.' });
+    }
+
     const { quizId } = req.params;
     if (quizId && quizId !== 'undefined') {
       const question = {
@@ -22,19 +32,55 @@ export const QuestionRoutes = (app) => {
   });
 
   app.get('/api/questions/:questionId', async (req, res) => {
-    const { questionId } = req.params;
-    if (questionId && questionId !== 'undefined') {
-      const question = await findQuestionById(questionId);
-      res.json(question);
-    } else {
-      res.status(404).json({ message: `Invalid question id: ${questionId}.` });
+    const currentUser = req.session['currentUser'];
+    if (!currentUser) {
+      res.status(401).json({ message: 'User not logged in.' });
+      return;
     }
+
+    const { questionId } = req.params;
+    if (!questionId || questionId === 'undefined') {
+      res.status(404).json({ message: `Invalid question id: ${questionId}.` });
+      return;
+    }
+    const question = await findQuestionById(questionId);
+
+    if (currentUser.role !== 'FACULTY' && currentUser.role !== 'ADMIN') {
+      const quiz = await findQuizById(question.quiz_id);
+      if (!quiz.published) {
+        res.status(401).json({ message: 'Quiz not published yet.' });
+        return;
+      }
+      if (quiz.due > new Date()) {
+        delete question.answer;
+      }
+    }
+
+    res.json(question);
   });
 
   app.get('/api/quizzes/:quizId/questions', async (req, res) => {
+    const currentUser = req.session['currentUser'];
+    if (!currentUser) {
+      res.status(401).json({ message: 'User not logged in.' });
+      return;
+    }
+
     const { quizId } = req.params;
     if (quizId && quizId !== 'undefined') {
       const questions = await findQuestionsForQuiz(quizId);
+      if (currentUser.role !== 'FACULTY' && currentUser.role !== 'ADMIN') {
+        const quiz = await findQuizById(quizId);
+        if (!quiz.published) {
+          res.status(401).json({ message: 'Quiz not published yet.' });
+          return;
+        }
+        if (quiz.due > new Date()) {
+          for (const question of questions) {
+            delete question.answer;
+          }
+        }
+      }
       res.json(questions);
     } else {
       res.status(404).json({ message: `Invalid quiz id: ${quizId}.` });
@@ -42,6 +88,15 @@ export const QuestionRoutes = (app) => {
   });
 
   app.put('/api/questions/:questionId', async (req, res) => {
+    const currentUser = req.session['currentUser'];
+    if (!currentUser) {
+      res.status(401).json({ message: 'User not logged in.' });
+      return;
+    }
+    if (currentUser.role !== 'FACULTY' && currentUser.role !== 'ADMIN') {
+      res.status(401).json({ message: 'Must be admin or faculty to update quiz questions.' });
+    }
+
     const { questionId } = req.params;
     if (questionId && questionId !== 'undefined') {
       const questionUpdates = req.body;
@@ -53,6 +108,15 @@ export const QuestionRoutes = (app) => {
   });
 
   app.delete('/api/questions/:questionId', async (req, res) => {
+    const currentUser = req.session['currentUser'];
+    if (!currentUser) {
+      res.status(401).json({ message: 'User not logged in.' });
+      return;
+    }
+    if (currentUser.role !== 'FACULTY' && currentUser.role !== 'ADMIN') {
+      res.status(401).json({ message: 'Must be admin or faculty to delete quiz questions.' });
+    }
+
     const { questionId } = req.params;
     if (questionId && questionId !== 'undefined') {
       const status = await deleteQuestion(questionId);

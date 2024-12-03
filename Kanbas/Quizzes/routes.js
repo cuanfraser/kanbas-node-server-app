@@ -2,6 +2,15 @@ import { createQuiz, deleteQuiz, findQuizzesForCourse, updateQuiz, findQuizById 
 
 export const QuizzesRoutes = (app) => {
   app.post('/api/courses/:courseId/quizzes', async (req, res) => {
+    const currentUser = req.session['currentUser'];
+    if (!currentUser) {
+      res.status(401).json({ message: 'User not logged in.' });
+      return;
+    }
+    if (currentUser.role !== 'FACULTY' && currentUser.role !== 'ADMIN') {
+      res.status(401).json({ message: 'Must be admin or faculty to create a quiz.' });
+    }
+
     const { courseId } = req.params;
     if (courseId && courseId !== 'undefined') {
       const quiz = {
@@ -36,6 +45,15 @@ export const QuizzesRoutes = (app) => {
   });
 
   app.put('/api/quizzes/:quizId', async (req, res) => {
+    const currentUser = req.session['currentUser'];
+    if (!currentUser) {
+      res.status(401).json({ message: 'User not logged in.' });
+      return;
+    }
+    if (currentUser.role !== 'FACULTY' && currentUser.role !== 'ADMIN') {
+      res.status(401).json({ message: 'Must be admin or faculty to update a quiz.' });
+    }
+
     const { quizId } = req.params;
     if (quizId && quizId !== 'undefined') {
       const quizUpdates = req.body;
@@ -47,6 +65,15 @@ export const QuizzesRoutes = (app) => {
   });
 
   app.delete('/api/quizzes/:quizId', async (req, res) => {
+    const currentUser = req.session['currentUser'];
+    if (!currentUser) {
+      res.status(401).json({ message: 'User not logged in.' });
+      return;
+    }
+    if (currentUser.role !== 'FACULTY' && currentUser.role !== 'ADMIN') {
+      res.status(401).json({ message: 'Must be admin or faculty to delete a quiz.' });
+    }
+
     const { quizId } = req.params;
     if (quizId && quizId !== 'undefined') {
       const status = await deleteQuiz(quizId);
