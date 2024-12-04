@@ -1,4 +1,11 @@
-import { createQuiz, deleteQuiz, findQuizzesForCourse, updateQuiz, findQuizById } from './dao.js';
+import {
+  createQuiz,
+  deleteQuiz,
+  findQuizzesForCourse,
+  updateQuiz,
+  findQuizById,
+  findPublishedQuizzesForCourse,
+} from './dao.js';
 
 export const QuizzesRoutes = (app) => {
   app.post('/api/courses/:courseId/quizzes', async (req, res) => {
@@ -35,10 +42,23 @@ export const QuizzesRoutes = (app) => {
   });
 
   app.get('/api/courses/:courseId/quizzes', async (req, res) => {
+    const currentUser = req.session['currentUser'];
+    if (!currentUser) {
+      res.status(401).json({ message: 'User not logged in.' });
+      return;
+    }
+
     const { courseId } = req.params;
     if (courseId && courseId !== 'undefined') {
-      const quizzes = await findQuizzesForCourse(courseId);
-      res.json(quizzes);
+      if (currentUser.role === 'FACULTY' || currentUser.role === 'ADMIN') {
+        const quizzes = await findQuizzesForCourse(courseId);
+        res.json(quizzes);
+        return;
+      } else {
+        const quizzes = await findPublishedQuizzesForCourse(courseId);
+        res.json(quizzes);
+        return;
+      }
     } else {
       res.status(404).json({ message: `Invalid course id: ${courseId}.` });
     }

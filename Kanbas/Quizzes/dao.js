@@ -13,6 +13,10 @@ export const findQuizzesForCourse = (courseId) => {
   return model.find({ course: courseId });
 };
 
+export const findPublishedQuizzesForCourse = (courseId) => {
+  return model.find({ course: courseId, published: true });
+};
+
 export const updateQuiz = (quizId, quizUpdates) => {
   delete quizUpdates._id;
   return model.findOneAndUpdate({ _id: quizId }, quizUpdates, { new: true });
