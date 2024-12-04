@@ -8,13 +8,12 @@ import {
 
 export const AttemptRoutes = (app) => {
   app.post('/api/quizzes/:quizId/attempts', async (req, res) => {
-    const { quizId } = req.params;
     const currentUser = req.session['currentUser'];
-
     if (!currentUser) {
       res.status(401).json({ message: 'User not logged in.' });
     }
 
+    const { quizId } = req.params;
     if (quizId && quizId !== 'undefined') {
       const attempt = {
         ...req.body,
