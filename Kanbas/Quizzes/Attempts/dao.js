@@ -10,7 +10,7 @@ export const createAttemptForQuiz = async (attempt) => {
   const previousAttempts = await findAttemptsByUserForQuiz(attempt.user_id);
   newAttempt.number = previousAttempts.length + 1;
 
-  newAttempt.score = getScoreForAttempt(newAttempt);
+  newAttempt.score = await getScoreForAttempt(newAttempt);
 
   return model.create(newAttempt);
 };
@@ -23,12 +23,12 @@ export const findAttemptsByUserForQuiz = (userId, quizId) => {
   return model.find({ user_id: userId, quiz_id: quizId });
 };
 
-export const updateAttempt = (attemptId, attemptUpdates) => {
+export const updateAttempt = async (attemptId, attemptUpdates) => {
   const attempt = { ...attemptUpdates, _id: attemptId };
   delete attempt.score;
   delete attempt.number;
 
-  attempt.score = getScoreForAttempt(attempt);
+  attempt.score = await getScoreForAttempt(attempt);
 
   return model.findOneAndUpdate({ _id: attemptId }, attempt, { new: true });
 };
