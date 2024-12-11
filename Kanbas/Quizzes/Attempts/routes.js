@@ -11,6 +11,7 @@ export const AttemptRoutes = (app) => {
     const currentUser = req.session['currentUser'];
     if (!currentUser) {
       res.status(401).json({ message: 'User not logged in.' });
+      return;
     }
 
     const { quizId } = req.params;
@@ -43,6 +44,7 @@ export const AttemptRoutes = (app) => {
 
     if (!currentUser) {
       res.status(401).json({ message: 'User not logged in.' });
+      return;
     }
 
     if (quizId && quizId !== 'undefined') {
@@ -58,9 +60,11 @@ export const AttemptRoutes = (app) => {
     const currentUser = req.session['currentUser'];
     if (!currentUser) {
       res.status(401).json({ message: 'User not logged in.' });
+      return;
     }
     if (!attemptId || attemptId === 'undefined') {
       res.status(404).json({ message: `Invalid attempt id: ${attemptId}.` });
+      return;
     }
 
     const attemptUpdates = req.body;
@@ -70,6 +74,7 @@ export const AttemptRoutes = (app) => {
       const existingAttempt = await findAttemptById(attemptId);
       if (existingAttempt.submitted) {
         res.status(401).json({ message: 'Attempt already submitted.' });
+        return;
       }
     }
 
@@ -84,6 +89,7 @@ export const AttemptRoutes = (app) => {
 
     if (!currentUser || (currentUser.role !== 'FACULTY' && currentUser.role !== 'ADMIN')) {
       res.status(401).json({ message: 'Only faculty and admins can delete quiz attempts.' });
+      return;
     }
 
     if (attemptId && attemptId !== 'undefined') {
