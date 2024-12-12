@@ -3,6 +3,7 @@ import {
   deleteAttempt,
   findAttemptById,
   findAttemptsByUserForQuiz,
+  findLatestSubmittedAttemptForUserForQuiz,
   updateAttempt,
 } from './dao.js';
 
@@ -50,6 +51,23 @@ export const AttemptRoutes = (app) => {
     if (quizId && quizId !== 'undefined') {
       const attempts = await findAttemptsByUserForQuiz(currentUser._id, quizId);
       res.json(attempts);
+    } else {
+      res.status(404).json({ message: `Invalid quiz id: ${quizId}.` });
+    }
+  });
+
+  app.get('/api/quizzes/:quizId/attempts/latest', async (req, res) => {
+    const { quizId } = req.params;
+    const currentUser = req.session['currentUser'];
+
+    if (!currentUser) {
+      res.status(401).json({ message: 'User not logged in.' });
+      return;
+    }
+
+    if (quizId && quizId !== 'undefined') {
+      const attempt = await findLatestSubmittedAttemptForUserForQuiz(currentUser._id, quizId);
+      res.json(attempt);
     } else {
       res.status(404).json({ message: `Invalid quiz id: ${quizId}.` });
     }

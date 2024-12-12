@@ -2,7 +2,7 @@ import { findQuestionById } from '../Questions/dao.js';
 import model from './model.js';
 
 export const createAttemptForQuiz = async (attempt) => {
-  const newAttempt = { ...attempt};
+  const newAttempt = { ...attempt };
   delete newAttempt._id;
   delete newAttempt.score;
   delete newAttempt.number;
@@ -21,6 +21,13 @@ export const findAttemptById = (attemptId) => {
 
 export const findAttemptsByUserForQuiz = (userId, quizId) => {
   return model.find({ user_id: userId, quiz_id: quizId });
+};
+
+export const findLatestSubmittedAttemptForUserForQuiz = (userId, quizId) => {
+  return model
+    .findOne({ user_id: userId, quiz_id: quizId, submitted: true })
+    .sort({ updatedAt: -1 })
+    .limit(1);
 };
 
 export const updateAttempt = async (attemptId, attemptUpdates) => {
