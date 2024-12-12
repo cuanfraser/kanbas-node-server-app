@@ -7,7 +7,7 @@ export const createAttemptForQuiz = async (attempt) => {
   delete newAttempt.score;
   delete newAttempt.number;
 
-  const previousAttempts = await findAttemptsByUserForQuiz(attempt.user_id);
+  const previousAttempts = await findAttemptsByUserForQuiz(attempt.user_id, attempt.quiz_id);
   newAttempt.number = previousAttempts.length + 1;
 
   await scoreAttempt(newAttempt);
