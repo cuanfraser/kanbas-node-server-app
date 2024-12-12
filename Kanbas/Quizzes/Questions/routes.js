@@ -16,6 +16,7 @@ export const QuestionRoutes = (app) => {
     }
     if (currentUser.role !== 'FACULTY' && currentUser.role !== 'ADMIN') {
       res.status(401).json({ message: 'Must be admin or faculty to create quiz questions.' });
+      return;
     }
 
     const { quizId } = req.params;
@@ -95,6 +96,7 @@ export const QuestionRoutes = (app) => {
     }
     if (currentUser.role !== 'FACULTY' && currentUser.role !== 'ADMIN') {
       res.status(401).json({ message: 'Must be admin or faculty to update quiz questions.' });
+      return;
     }
 
     const { questionId } = req.params;
@@ -115,6 +117,7 @@ export const QuestionRoutes = (app) => {
     }
     if (currentUser.role !== 'FACULTY' && currentUser.role !== 'ADMIN') {
       res.status(401).json({ message: 'Must be admin or faculty to delete quiz questions.' });
+      return;
     }
 
     const { questionId } = req.params;
