@@ -10,7 +10,7 @@ export const createAttemptForQuiz = async (attempt) => {
   const previousAttempts = await findAttemptsByUserForQuiz(attempt.user_id);
   newAttempt.number = previousAttempts.length + 1;
 
-  newAttempt.score = await getScoreForAttempt(newAttempt);
+  await scoreAttempt(newAttempt);
 
   return model.create(newAttempt);
 };
@@ -28,7 +28,7 @@ export const updateAttempt = async (attemptId, attemptUpdates) => {
   delete attempt.score;
   delete attempt.number;
 
-  attempt.score = await getScoreForAttempt(attempt);
+  await scoreAttempt(attempt);
 
   return model.findOneAndUpdate({ _id: attemptId }, attempt, { new: true });
 };
@@ -37,19 +37,23 @@ export const deleteAttempt = (attemptId) => {
   return model.deleteOne({ _id: attemptId });
 };
 
-const getScoreForAttempt = async (attempt) => {
+const scoreAttempt = async (attempt) => {
   let score = 0;
   if (attempt.submitted) {
-    for (const answer of attempt.answers) {
+    for (let i in attempt.answers) {
+      const answer = attempt.answers[i];
       const question = await findQuestionById(answer.question_id);
       if (question) {
         const correctAnswer = question.answer?.trim().toLowerCase();
         const attemptAnswer = answer.answer?.trim().toLowerCase();
         if (correctAnswer === attemptAnswer) {
           score = score + question.points;
+          attempt.answers[i].correct = true;
+        } else {
+          attempt.answers[i].correct = false;
         }
       }
     }
   }
-  return score;
+  attempt.score = score;
 };

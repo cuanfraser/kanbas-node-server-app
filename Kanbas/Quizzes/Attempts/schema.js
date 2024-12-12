@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 const answerSchema = new mongoose.Schema({
   question_id: mongoose.Schema.Types.ObjectId,
   answer: String,
+  correct: Boolean
 });
 
 const quizAttemptSchema = new mongoose.Schema(
